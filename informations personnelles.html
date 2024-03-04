@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulaire d'informations personnelles</title>
+  <style>
+    .signature-container {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Entrez vos informations personnelles</h2>
+  
+  <form id="myForm">
+    <label for="firstName">Prénom :</label>
+    <input type="text" id="firstName" name="firstName" required><br><br>
+
+    <label for="lastName">Nom :</label>
+    <input type="text" id="lastName" name="lastName" required><br><br>
+
+    <label for="email">Email :</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="dateOfBirth">Date de naissance :</label>
+    <input type="date" id="dateOfBirth" name="dateOfBirth" required><br><br>
+
+    <label for="placeOfBirth">Lieu de naissance :</label>
+    <input type="text" id="placeOfBirth" name="placeOfBirth" required><br><br>
+
+    <label for="profession">Qualité professionnelle :</label>
+    <input type="text" id="profession" name="profession" required><br><br>
+
+    <label for="cin">Numéro de CIN :</label>
+    <input type="text" id="cin" name="cin" required><br><br>
+
+    <div class="signature-container">
+      <label>Signature :</label><br>
+      <canvas id="signatureCanvas" width="400" height="200"></canvas><br>
+      <button type="button" onclick="clearCanvas()">Effacer la signature</button>
+    </div>
+
+    <br>
+    <input type="submit" value="Soumettre">
+  </form>
+
+  <script>
+    // Code JavaScript pour gérer la signature
+    
+    var canvas = document.getElementById('signatureCanvas');
+    var context = canvas.getContext('2d');
+    var isDrawing = false;
+    
+    canvas.addEventListener('mousedown', function(e) {
+      isDrawing = true;
+      context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    });
+    
+    canvas.addEventListener('mousemove', function(e) {
+      if (isDrawing === true) {
+        drawLine(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+      }
+    });
+    
+    canvas.addEventListener('mouseup', function(e) {
+      isDrawing = false;
+    });
+    
+    function drawLine(x, y) {
+      context.lineTo(x, y);
+      context.lineWidth = 2;
+      context.stroke();
+    }
+    
+    function clearCanvas() {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    
+    // Code JavaScript pour soumettre le formulaire
+    
+    var form = document.getElementById('myForm');
+    
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      var firstName = document.getElementById('firstName').value;
+      var lastName = document.getElementById('lastName').value;
+      var email = document.getElementById('email').value;
+      var dateOfBirth = document.getElementById('dateOfBirth').value;
+      var placeOfBirth = document.getElementById('placeOfBirth').value;
+      var profession = document.getElementById('profession').value;
+      var cin = document.getElementById('cin').value;
+      var signature = canvas.toDataURL();
+      
+      // Envoyez les données à votre serveur ou effectuez d'autres opérations ici
+      
+      // Exemple d'affichage des données soumises dans la console
+      console.log('Prénom :', firstName);
+      console.log('Nom :', lastName);
+      console.log('Email :', email);
+      console.log('Date de naissance :', dateOfBirth);
+      console.log('Lieu de naissance :', placeOfBirth);
+      console.log('Qualité professionnelle :', profession);
+      console.log('Numéro de CIN :', cin);
+      console.log('Signature :', signature);
+      
+      // Réinitialisez le formulaire et la signature
+      form.reset();
+      clearCanvas();
+    });
+  </script>
+</body>
+</html>

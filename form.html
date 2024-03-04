@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+    }
+    
+    .container {
+        width: 400px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    label {
+        margin-bottom: 8px;
+    }
+    
+    input {
+        padding: 8px;
+        margin-bottom: 16px;
+    }
+    
+    button {
+        margin-top: 16px;
+        padding: 8px;
+        cursor: pointer;
+    }
+    </style>
+    <title>Formulaire d'Informations Personnelles</title>
+</head>
+<body>
+    <div class="container">
+        <form id="personalInfoForm">
+            <label for="firstName">Prénom :</label>
+            <input type="text" id="firstName" name="firstName" required>
+
+            <label for="lastName">Nom :</label>
+            <input type="text" id="lastName" name="lastName" required>
+
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="signature">Signature :</label>
+            <canvas id="signatureCanvas" width="400" height="200" style="border:1px solid #000;"></canvas>
+            <button type="button" onclick="clearSignature()">Effacer la signature</button>
+
+            <input type="submit" value="Envoyer">
+        </form>
+    </div>
+
+    <script>document.addEventListener('DOMContentLoaded', function () {
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+    
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+    
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+    
+        function draw(e) {
+            if (!isDrawing) return;
+    
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+    
+            ctx.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+        }
+    
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+    
+        // Function to clear the signature
+        window.clearSignature = function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        };
+    
+        // Form submission handling
+        const form = document.getElementById('personalInfoForm');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+    
+            // Add your form submission logic here
+            // You can access form data using form.elements
+            // For example: form.elements.firstName.value
+            // Don't forget to handle the signature data from the canvas
+        });
+    });
+    </script>
+</body>
+</html>

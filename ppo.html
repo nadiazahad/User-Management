@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management CRUD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        button.delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>User Management</h1>
+
+    <form id="userForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <button type="button" onclick="addUser()">Add User</button>
+    </form>
+
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- User data will be displayed here -->
+        </tbody>
+    </table>
+
+    <script>
+        let users = [];
+
+        function addUser() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            if (name && email) {
+                const user = {
+                    id: Date.now(),
+                    name: name,
+                    email: email
+                };
+
+                users.push(user);
+                displayUsers();
+                clearForm();
+            }
+        }
+
+        function deleteUser(id) {
+            users = users.filter(user => user.id !== id);
+            displayUsers();
+        }
+
+        function displayUsers() {
+            const tableBody = document.querySelector('#userTable tbody');
+            tableBody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = tableBody.insertRow();
+
+                for (const key in user) {
+                    const cell = row.insertCell();
+                    cell.textContent = user[key];
+                }
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete';
+                deleteButton.addEventListener('click', () => deleteUser(user.id));
+
+                const actionCell = row.insertCell();
+                actionCell.appendChild(deleteButton);
+            });
+        }
+
+        function clearForm() {
+            document.getElementById('userForm').reset();
+        }
+    </script>
+
+</body>
+</html>
